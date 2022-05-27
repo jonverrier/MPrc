@@ -9,7 +9,7 @@
 TXP Media Processing is a suite of tools for programatically generating interesting video content, such as sub-sampled / stuttery video, color processing, and assembly of a video from a set of frames.  
 
 ## Technologies
-TXP Photographic Memory is created with:
+TXP Media Processing is created with:
 * C++ 20 
 * Visual Studio Community 2022
 * ICU library for unicode processing 
@@ -28,7 +28,6 @@ TXP Media Processing is composed of several different components, each of which 
  
 
 ## Installation
-
 To install & build a local copy for development:
 * Install Visual Studio Community 2022.  
 * Use 'vcpkg' to install ICU, TCLAP, . 
