@@ -1,0 +1,12 @@
+*.xlsx
+*.pem
+*.obj
+*.map
+*.dll
+*.config
+*.manifest
+*.testlog
+.vs/* 
+*.log
+*/obj/*
+.vs/*
