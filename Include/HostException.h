@@ -6,91 +6,64 @@
 #ifndef HOSTEXCEPTION_INCLUDED
 #define HOSTEXCEPTION_INCLUDED
 
-#include "Common.h"
 #include "Host.h"
+#include <string>
 
-/// <summary>
-/// HostException - describes exceptions specific to the underlying operating system
-/// </summary>
-class HOST_API HostException
-{
-public :
+namespace Host {
 
-   // Constructors 
-   HostException (HUint errorCode, 
-                  const HChar * fileName, HUint lineNumber);
+    /// <summary>
+    /// HostException - describes exceptions specific to the underlying operating system
+    /// </summary>
+    class HOST_API Exception
+    {
+    public:
 
-   HostException (const HostException& copyMe);
+        // Constructors 
+        Exception(unsigned int errorCode,
+                  const wchar_t* fileName, unsigned lineNumber);
 
-   virtual  
-   ~HostException (void);
-   
-   // Attributes
-   HUint errorCode () const;
+        Exception(const Exception& copyMe);
 
-   HString sourceFilename () const;
+        virtual
+            ~Exception(void);
 
-   HUint sourceLineNumber () const;
+        // Attributes
+        unsigned int errorCode() const;
 
-   HString formattedAsString() const;
+        std::wstring sourceFilename() const;
 
-   // Comparison Operators
-   bool operator== (const HostException& rhs) const;
-      
-   bool operator!= (const HostException& rhs) const;
+        unsigned int sourceLineNumber() const;
 
-   // Operations
-   HostException& operator= (const HostException& copyMe);
+        std::wstring formattedAsString() const;
 
-protected :
-   
-private :
-   void 
-   logException (HUint errorCode, 
-                 const HChar *fileName, HUint lineNumber, HString& formattedOutput);
+        // Comparison Operators
+        bool operator== (const Exception& rhs) const;
 
-   HUint    m_lineNumber;
-   HUint    m_errorCode;
-   HString  m_fileName;
-   HString  m_formattedOutput;
-};
+        bool operator!= (const Exception& rhs) const;
 
-/// <summary>
-/// HostExceptionLogger - logs exceptions to the screen.
-/// TODO: Extend to log to system event log
-/// </summary>
-class HOST_API HostExceptionLogger
-{
-public :
+        // Operations
+        Exception& operator= (const Exception& copyMe);
 
-   HostExceptionLogger ();
-   virtual ~HostExceptionLogger (void);
-   
-   // Operations
-   static void initialise();
+    protected:
 
-   static void terminate();
+    private:
+        void
+            logException(unsigned int errorCode,
+                const wchar_t* fileName, unsigned int lineNumber, std::wstring& formattedOutput);
 
-   void logException (HUint code,
-                 const HString& file,
-                 HUint line,
-                 const HString& desc);
+        unsigned int  m_lineNumber;
+        unsigned int  m_errorCode;
 
-   static void logAssertionFailure (const HString& expr,
-                        const HString& file,
-                        HUint line);
+#pragma warning (push)
+#pragma warning (disable: 4251)
+        std::wstring  m_fileName;
+        std::wstring  m_formattedOutput;
+#pragma warning (pop)
 
-protected :
-   
-private :
+    };
 
-   // Constructors 
-   HostExceptionLogger (const HostExceptionLogger& copyMe);
-   HostExceptionLogger& operator= (const HostExceptionLogger& copyMe);
+}
 
-   static void writeAlways (const HString& event);
-};
-
-#define THROW(e, code) throw e(code, H_TEXT(__FILE__), __LINE__)
+#define THROW(e, code) throw e(code, HOSTWFILE, __LINE__)
 
 #endif // MHOSTEXCEPTION_INCLUDED

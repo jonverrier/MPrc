@@ -1,7 +1,4 @@
-*.xlsx
 *.pem
-*.obj
-*.map
 *.dll
 *.config
 *.manifest
@@ -9,4 +6,11 @@
 .vs/* 
 *.log
 */obj/*
+*/x64/*
 .vs/*
+x64/*
+packages/*
+node_modules/*
+
+
+

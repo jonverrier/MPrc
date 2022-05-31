@@ -1,6 +1,6 @@
 /////////////////////////////////////////
 // Host.h
-// Copyright (c) 2020 TXPCo Ltd
+// Copyright (c) 2022 TXPCo Ltd
 /////////////////////////////////////////
 
 // Import / export for DLL linkage 
@@ -32,3 +32,9 @@
 #error "Linux debug package not yet defined."
 #endif
 #endif
+
+#define HOST_STRING_BUFFER_SIZE 512
+
+#define HOST_WIDEN2(x) L ## x
+#define HOST_WIDEN(x) HOST_WIDEN2(x)
+#define HOST_WFILE HOST_WIDEN(__FILE__)
