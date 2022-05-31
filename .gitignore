@@ -1,6 +1,5 @@
 *.pem
 *.dll
-*.config
 *.manifest
 *.testlog
 .vs/* 
