@@ -134,25 +134,25 @@ namespace Host {
             out = sz;
         }
         else
-            if ((HRESULT_FACILITY(errorCode) == FACILITY_MF
-                || (HRESULT_FACILITY(errorCode) == FACILITY_D2D)))
+        if ((HRESULT_FACILITY(errorCode) == FACILITY_MF
+             || (HRESULT_FACILITY(errorCode) == FACILITY_D2D)))
+        {
+            CComPtr<IErrorInfo> pErrInfo;
+
+            HRESULT result = ::GetErrorInfo(0, &pErrInfo);
+            if (SUCCEEDED(result) && pErrInfo != (NULL))
             {
-                CComPtr<IErrorInfo> pErrInfo;
+                BSTR bstr;
+                pErrInfo->GetDescription(&bstr);
 
-                HRESULT result = ::GetErrorInfo(0, &pErrInfo);
-                if (SUCCEEDED(result) && pErrInfo != (NULL))
-                {
-                    BSTR bstr;
-                    pErrInfo->GetDescription(&bstr);
-
-                    out = bstr;
-                    ::SysFreeString(bstr);
-                    ::SetErrorInfo(0, pErrInfo); // This propogates error info up the call chain
-                }
-                else {
-                    out = defaultErrorString;
-                }
+                out = bstr;
+                ::SysFreeString(bstr);
+                ::SetErrorInfo(0, pErrInfo); // This propogates error info up the call chain
             }
+            else {
+                out = defaultErrorString;
+            }
+        }
 
         std::wcout << out;
     }

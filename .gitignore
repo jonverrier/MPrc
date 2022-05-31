@@ -6,6 +6,7 @@
 *.log
 */obj/*
 */x64/*
+*/vcpkg_installed/*
 .vs/*
 x64/*
 packages/*

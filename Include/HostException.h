@@ -48,8 +48,8 @@ namespace Host {
 
     private:
         void
-            logException(unsigned int errorCode,
-                const wchar_t* fileName, unsigned int lineNumber, std::wstring& formattedOutput);
+        logException(unsigned int errorCode,
+                     const wchar_t* fileName, unsigned int lineNumber, std::wstring& formattedOutput);
 
         unsigned int  m_lineNumber;
         unsigned int  m_errorCode;
