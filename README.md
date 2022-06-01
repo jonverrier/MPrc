@@ -14,7 +14,7 @@ TXP Media Processing is created with:
 * Visual Studio Community 2022
 * ICU library for unicode processing 
 * TCLAP library for command line parsing.
-* Log4cxx library for logging.
+* Spdlog library for logging.
 * OpenEXR file format libary.
 * OpenColorIO color management library. 
 * FFMPEG video processing library. 
