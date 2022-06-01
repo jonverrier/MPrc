@@ -31,7 +31,7 @@ TXP Media Processing is composed of several different components, each of which 
 To install & build a local copy for development:
 * Install Visual Studio Community 2022.  
 * Use 'vcpkg' to install ICU, TCLAP, OpenEXR, OpenColorIO, FFMPEG. 
-* Open & build the 'MProc' solution (media processing). The solution builds developer versions to the 'bindw64' directory, and release versions to 'binrw64'.
+* Open & build the 'MPrc' solution (media processing). The solution builds developer versions to the 'x64/Debug' directory, and release versions to 'x64/Release'.
 
 ## Licence
 
