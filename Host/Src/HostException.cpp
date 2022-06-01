@@ -14,36 +14,55 @@
 
 #include "../../Include/HostException.h"
 
-//#define CODEFROMHRESULT(hr)        (((hr & 0xFFFF0000) == MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, 0)) ? HRESULT_CODE(hr) : (hr == S_OK ? 0 : -1))
-//#define TEXTFROMHRESULT(hr)        (_com_error(hr).ErrorMessage())
-
 const std::wstring defaultErrorString = L"Cannot obtain error information from system.\n";
+
+static const Host::ExceptionLogger* pGlobalLogger = NULL;
 
 namespace Host {
 
     ///////////////////////////////////////////////////////////////////////////////
-    // HostException
+    // ExceptionLoggerFactory
+    ///////////////////////////////////////////////////////////////////////////////
+
+    const ExceptionLogger* ExceptionLoggerFactory::set(const ExceptionLogger* pNewLogger) {
+        
+        const Host::ExceptionLogger* pOldLogger = pGlobalLogger;
+        
+        pGlobalLogger = pNewLogger;
+
+        return pOldLogger;
+    };
+
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // ExceptionLogger
+    ///////////////////////////////////////////////////////////////////////////////
+    ExceptionLogger::~ExceptionLogger(void) {
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // Exception
     ///////////////////////////////////////////////////////////////////////////////
 
     Exception::Exception(unsigned int errorCode,
-        const wchar_t* fileName,
+        std::wstring_view fileName,
         unsigned lineNumber)
         : m_errorCode(errorCode),
         m_lineNumber(lineNumber),
         m_fileName(fileName),
-        m_formattedOutput()
+        m_formatted()
     {
-        std::wstring extraOut;
+        std::wstring_view extraOut;
 
         logException(errorCode, fileName, lineNumber, extraOut);
-        m_formattedOutput = extraOut;
+        m_formatted = extraOut;
     }
 
     Exception::Exception(const Exception& copyMe)
         : m_errorCode(copyMe.m_errorCode),
         m_lineNumber(copyMe.m_lineNumber),
         m_fileName(copyMe.m_fileName),
-        m_formattedOutput(copyMe.m_formattedOutput)
+        m_formatted(copyMe.m_formatted)
     {
     }
 
@@ -56,13 +75,13 @@ namespace Host {
         return m_errorCode;
     }
 
-    std::wstring
-    Exception::formattedAsString() const
+    std::wstring_view
+    Exception::formatted() const
     {
-        return m_formattedOutput;
+        return m_formatted;
     }
 
-    std::wstring
+    std::wstring_view
     Exception::sourceFilename() const
     {
         return m_fileName;
@@ -81,7 +100,7 @@ namespace Host {
             return TRUE;
 
         return m_errorCode == rhs.m_errorCode
-            && m_formattedOutput == rhs.m_formattedOutput
+            && m_formatted == rhs.m_formatted
             && m_fileName == rhs.m_fileName
             && m_lineNumber == rhs.m_lineNumber;
     }
@@ -93,7 +112,7 @@ namespace Host {
             return FALSE;
 
         return m_errorCode != rhs.m_errorCode
-            || m_formattedOutput != rhs.m_formattedOutput
+            || m_formatted != rhs.m_formatted
             || m_fileName != rhs.m_fileName
             || m_lineNumber != rhs.m_lineNumber;
     }
@@ -104,18 +123,18 @@ namespace Host {
         m_errorCode = copyMe.m_errorCode;
         m_fileName = copyMe.m_fileName;
         m_lineNumber = copyMe.m_lineNumber;
-        m_formattedOutput = copyMe.m_formattedOutput;
+        m_formatted = copyMe.m_formatted;
 
         return *this;
     }
 
     void
     Exception::logException(unsigned int errorCode,
-            const wchar_t* fileName,
+            std::wstring_view fileName,
             unsigned int lineNumber,
-            std::wstring& out)
+            std::wstring_view& out)
     {
-        out = L"";
+        out = {};
 
         // System error if non zero, and facility is unspecified or WIN32
         if (errorCode != 0 &&
@@ -154,7 +173,12 @@ namespace Host {
             }
         }
 
-        std::wcout << out;
+        if (pGlobalLogger) {
+            pGlobalLogger->log(out);
+        }
+        else {
+            std::wcout << out;
+        }
     }
 
 }

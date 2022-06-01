@@ -14,7 +14,7 @@ TEST(HostExceptionTest, SimpleConstruction) {
 	EXPECT_EQ(ex.errorCode(), 0);
 	EXPECT_EQ(ex.sourceLineNumber(), 2);
 	EXPECT_EQ(ex.sourceFilename(), HOST_WFILE);
-	EXPECT_TRUE(ex.formattedAsString().size() == 0);
+	EXPECT_TRUE(ex.formatted().size() == 0);
 }
 
 TEST(HostExceptionTest, FormattingOS) {
@@ -24,7 +24,7 @@ TEST(HostExceptionTest, FormattingOS) {
 	EXPECT_EQ(ex.errorCode(), ERROR_ACCESS_DENIED);
 	EXPECT_EQ(ex.sourceLineNumber(), 2);
 	EXPECT_EQ(ex.sourceFilename(), HOST_WFILE);
-	EXPECT_TRUE(ex.formattedAsString().size() > 0);
+	EXPECT_TRUE(ex.formatted().size() > 0);
 }
 
 TEST(HostExceptionTest, FormattingMF) {
@@ -34,6 +34,21 @@ TEST(HostExceptionTest, FormattingMF) {
 	EXPECT_EQ(ex.errorCode(), MAKE_HRESULT(SEVERITY_ERROR, FACILITY_MF, MF_E_BUFFERTOOSMALL));
 	EXPECT_EQ(ex.sourceLineNumber(), 2);
 	EXPECT_EQ(ex.sourceFilename(), HOST_WFILE);
-	EXPECT_TRUE(ex.formattedAsString().size() > 0);
+	EXPECT_TRUE(ex.formatted().size() > 0);
 }
 
+TEST(HostExceptionTest, Throw) {
+
+	Host::Exception ex(MAKE_HRESULT(SEVERITY_ERROR, FACILITY_MF, MF_E_BUFFERTOOSMALL), HOST_WFILE, 2);
+	bool caught = false;
+
+	try {
+		THROW(Host::Exception, ERROR_ACCESS_DENIED);
+	}
+	catch (Host::Exception& ex) {
+		caught = true;
+		UNREFERENCED_PARAMETER(ex);
+	}
+
+	EXPECT_EQ(caught, true);
+}

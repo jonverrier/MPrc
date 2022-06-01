@@ -38,3 +38,11 @@
 #define HOST_WIDEN2(x) L ## x
 #define HOST_WIDEN(x) HOST_WIDEN2(x)
 #define HOST_WFILE HOST_WIDEN(__FILE__)
+
+// Reduce lint / compiler warnings if have unused parameters
+#ifndef UNREFERENCED_PARAMETER
+#define UNREFERENCED_PARAMETER(P) (P)
+#endif
+
+// macro to throw exception, including filename & line number
+#define THROW(e, code) throw e(code, HOST_WFILE, __LINE__)
