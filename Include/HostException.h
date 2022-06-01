@@ -60,7 +60,7 @@ namespace Host {
 
         unsigned int sourceLineNumber() const;
 
-        std::wstring_view formatted() const;
+        std::wstring formatted() const;
 
         // Comparison Operators
         bool operator== (const Exception& rhs) const;
@@ -77,7 +77,7 @@ namespace Host {
         logException(unsigned int errorCode,
                      std::wstring_view fileName, 
                      unsigned int lineNumber,
-                     std::wstring_view& formattedOutput);
+                     std::wstring& formattedOutput);
 
         unsigned int  m_lineNumber;
         unsigned int  m_errorCode;
@@ -85,7 +85,7 @@ namespace Host {
 #pragma warning (push)
 #pragma warning (disable: 4251)
         std::wstring_view  m_fileName;
-        std::wstring_view  m_formatted;
+        std::wstring  m_formatted;
 #pragma warning (pop)
 
     };

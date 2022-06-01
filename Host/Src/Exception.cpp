@@ -52,10 +52,9 @@ namespace Host {
         m_fileName(fileName),
         m_formatted()
     {
-        std::wstring_view extraOut;
+        std::wstring extraOut;
 
-        logException(errorCode, fileName, lineNumber, extraOut);
-        m_formatted = extraOut;
+        logException(errorCode, fileName, lineNumber, m_formatted);
     }
 
     Exception::Exception(const Exception& copyMe)
@@ -75,7 +74,7 @@ namespace Host {
         return m_errorCode;
     }
 
-    std::wstring_view
+    std::wstring
     Exception::formatted() const
     {
         return m_formatted;
@@ -132,7 +131,7 @@ namespace Host {
     Exception::logException(unsigned int errorCode,
             std::wstring_view fileName,
             unsigned int lineNumber,
-            std::wstring_view& out)
+            std::wstring& out)
     {
         out = {};
 
