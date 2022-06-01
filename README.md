@@ -14,24 +14,24 @@ TXP Media Processing is created with:
 * Visual Studio Community 2022
 * ICU library for unicode processing 
 * TCLAP library for command line parsing.
-* Log4cxx library for logging.
+* spdylog library for logging.
 * OpenEXR file format libary.
 * OpenColorIO color management library. 
 * FFMPEG video processing library. 
 	
 ## Design
 TXP Media Processing is composed of several different components, each of which is implemented as a separate library for development purposes:
-* Host - defines & implements wrappers to operating specific calls. At some point, a Linux port will be created, and this will be the first library to change. 
+* Host - defines & implements wrappers to operating specific calls. At some point, a Linux port will be created, and this will be the only library that needs substantial change. 
 * Media - has a light dependency on 'Host', but is mostly operating system independent. As much logic as possible is included here to maximise portability. Media uses OpenEXR, OpenColorIO, and FFMPEG libraries to do the heavy lifting. 
 * Cmd - command line tools. Shell only, all the actual logic is in Media
-* Test - contains the test suite. 
+* TestXXX - contains the test suites. 
  
 
 ## Installation
 To install & build a local copy for development:
 * Install Visual Studio Community 2022.  
-* Use 'vcpkg' to install ICU, TCLAP, Log4cxx, OpenEXR, OpenColorIO, FFMPEG. 
-* Open & build the 'MProc' solution (media processing). The solution builds developer versions to the 'bindw64' directory, and release versions to 'binrw64'.
+* Use 'vcpkg' to install ICU, TCLAP, OpenEXR, OpenColorIO, FFMPEG. 
+* Open & build the 'MPrc' solution (media processing). The solution builds developer versions to the 'x64/Debug' directory, and release versions to 'x64/Release'.
 
 ## Licence
 
