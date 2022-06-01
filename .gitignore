@@ -11,6 +11,7 @@
 x64/*
 packages/*
 node_modules/*
+spdlog/*
 
 
 

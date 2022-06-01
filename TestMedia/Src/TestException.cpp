@@ -6,7 +6,7 @@
 
 TEST(MediaHostExceptionLogging, Logging) {
 
-  Media::HostExceptionLogger *plogger = new Media::HostExceptionLogger();
+  Media::ExceptionLogger*plogger = new Media::ExceptionLogger();
 
   Host::ExceptionLoggerFactory::set(plogger);
 

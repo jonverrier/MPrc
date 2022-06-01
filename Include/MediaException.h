@@ -14,15 +14,15 @@
 namespace Media {
 
     /// <summary>
-    /// MediaExceptionLogger -  implements a logger to pass to Host layer for logging by dependency injection
+    /// ExceptionLogger -  implements a logger to pass to Host layer for logging by dependency injection
     /// </summary>
-    class MEDIA_API HostExceptionLogger : public Host::ExceptionLogger {
+    class MEDIA_API ExceptionLogger : public Host::ExceptionLogger {
         
     public:
         virtual void log (const std::wstring_view formatted) const;
         
         virtual
-        ~HostExceptionLogger(void);
+        ~ExceptionLogger(void);
     }; 
 
 }
