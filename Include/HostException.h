@@ -7,8 +7,6 @@
 #define HOSTEXCEPTION_INCLUDED
 
 #include "Host.h"
-#include <string>
-#include <iostream>
 #include <string_view>
 
 namespace Host {
@@ -16,7 +14,7 @@ namespace Host {
     /// <summary>
     /// ExceptionLogger - signature for exception logger, defined here so users of this library can pass their own one up via dependency injection. 
     /// </summary>
-    class ExceptionLogger {
+    class HOST_API ExceptionLogger {
         
     public:
         virtual void log (const std::wstring_view formatted) const = 0;
@@ -28,13 +26,14 @@ namespace Host {
     /// <summary>
     /// ExceptionLoggerFactory - holds singleton for exception logger to use. 
     /// </summary>
-    class ExceptionLoggerFactory {
+    class HOST_API ExceptionLoggerFactory {
 
+    public:
         // Note - not thread safe, assumption is that this is called very early in file of program, during startup, and not called again until safe shutdown (if ever)
         // The old logger is returned to allow caller to set it back to previous
         // It is initially NULL, which means log to console
         // Callers job to reset it & delete any new objects created
-        const ExceptionLogger* set (const ExceptionLogger* pNewLogger);
+        static const ExceptionLogger* set (const ExceptionLogger* pNewLogger);
     };
 
     /// <summary>
