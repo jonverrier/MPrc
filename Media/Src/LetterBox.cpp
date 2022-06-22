@@ -10,6 +10,8 @@
 #include "../../Include/MediaGeometry.h"
 
 
+static const Media::MGBox nullBox = Media::MGBox(Media::MGPoint(0.0, 0.0), Media::MGPoint(0.0, 0.0));
+
 namespace Media {
 
     bool MEDIA_API isValidForLetterBox(const MGSize& sz) {
@@ -39,10 +41,10 @@ namespace Media {
         double destinationLBHeight;
         MGBox letterBox;
 
-        if (!isValidForLetterBox (source))
-            throw std::invalid_argument("Source is invalid size for LetterBox calculation.");
-        if (!isValidForLetterBox(source))
-            throw std::invalid_argument("Target is invalid size for LetterBox calculation.");
+        if (!isValidForLetterBox(source) || !isValidForLetterBox(source)) {
+            fill1 = fill2 = nullBox;
+            return nullBox;
+        }
 
         if (((sourceWidth * destinationHeight) / sourceHeight) <= destinationWidth)
         {
