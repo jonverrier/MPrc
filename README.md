@@ -12,9 +12,11 @@ TXP Media Processing is a suite of tools for programatically generating interest
 TXP Media Processing is created with:
 * C++ 20 
 * Visual Studio Community 2022
+* Spdlog library for logging.
 * ICU library for unicode processing 
 * TCLAP library for command line parsing.
 * spdylog library for logging.
+* boost-geometry for geometry classes (Point, Box, ...)
 * OpenEXR file format libary.
 * OpenColorIO color management library. 
 * FFMPEG video processing library. 
@@ -26,12 +28,13 @@ TXP Media Processing is composed of several different components, each of which 
 * Cmd - command line tools. Shell only, all the actual logic is in Media
 * TestXXX - contains the test suites. 
  
-
 ## Installation
 To install & build a local copy for development:
 * Install Visual Studio Community 2022.  
 * Use 'vcpkg' to install ICU, TCLAP, OpenEXR, OpenColorIO, FFMPEG. 
 * Open & build the 'MPrc' solution (media processing). The solution builds developer versions to the 'x64/Debug' directory, and release versions to 'x64/Release'.
+* Use 'vcpkg' to install ICU, TCLAP, boost-geometry, spdylog, OpenEXR, OpenColorIO, FFMPEG. 
+* Open & build the 'MPrc' solution (media processing). 
 
 ## Licence
 
