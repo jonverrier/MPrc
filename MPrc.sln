@@ -10,11 +10,18 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B4F12C28-03D9-47A5-B079-7354D1465997}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Media", "Media\Media.vcxproj", "{2A0D7737-C7C5-4D28-9DA0-C8181135CF9B}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestMedia", "TestMedia\TestMedia.vcxproj", "{5F35779F-AD5E-4892-B789-9177F8C49BCC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Viewer", "Viewer\Viewer.vcxproj", "{3050B973-5097-42F3-8C93-5C5A97DD5113}"
+	ProjectSection(ProjectDependencies) = postProject
+		{267F98BD-D0B1-44A0-9B6F-B495BEC4150F} = {267F98BD-D0B1-44A0-9B6F-B495BEC4150F}
+		{2A0D7737-C7C5-4D28-9DA0-C8181135CF9B} = {2A0D7737-C7C5-4D28-9DA0-C8181135CF9B}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,6 +63,14 @@ Global
 		{5F35779F-AD5E-4892-B789-9177F8C49BCC}.Release|x64.Build.0 = Release|x64
 		{5F35779F-AD5E-4892-B789-9177F8C49BCC}.Release|x86.ActiveCfg = Release|Win32
 		{5F35779F-AD5E-4892-B789-9177F8C49BCC}.Release|x86.Build.0 = Release|Win32
+		{3050B973-5097-42F3-8C93-5C5A97DD5113}.Debug|x64.ActiveCfg = Debug|x64
+		{3050B973-5097-42F3-8C93-5C5A97DD5113}.Debug|x64.Build.0 = Debug|x64
+		{3050B973-5097-42F3-8C93-5C5A97DD5113}.Debug|x86.ActiveCfg = Debug|Win32
+		{3050B973-5097-42F3-8C93-5C5A97DD5113}.Debug|x86.Build.0 = Debug|Win32
+		{3050B973-5097-42F3-8C93-5C5A97DD5113}.Release|x64.ActiveCfg = Release|x64
+		{3050B973-5097-42F3-8C93-5C5A97DD5113}.Release|x64.Build.0 = Release|x64
+		{3050B973-5097-42F3-8C93-5C5A97DD5113}.Release|x86.ActiveCfg = Release|Win32
+		{3050B973-5097-42F3-8C93-5C5A97DD5113}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

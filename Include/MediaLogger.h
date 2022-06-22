@@ -9,7 +9,6 @@
 #include <string_view>
 
 #include "Host.h"
-#include "HostException.h"
 #include "Media.h"
 
 #define SPDLOG_HEADER_ONLY
