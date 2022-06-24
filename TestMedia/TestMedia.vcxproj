@@ -51,6 +51,7 @@
     </ClCompile>
     <ClCompile Include="Src\TestException.cpp" />
     <ClCompile Include="Src\TestExr.cpp" />
+    <ClCompile Include="Src\TestFrame.cpp" />
     <ClCompile Include="Src\TestGeometry.cpp" />
     <ClCompile Include="Src\TestUnicode.cpp" />
     <ClCompile Include="Src\TestUtf16Utf8.cpp" />

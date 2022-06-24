@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Src\dllmain.cpp" />
     <ClCompile Include="Src\ExceptionLogger.cpp" />
+    <ClCompile Include="Src\Frame.cpp" />
     <ClCompile Include="Src\LetterBox.cpp" />
     <ClCompile Include="Src\Logger.cpp" />
     <ClCompile Include="Src\pch.cpp">
@@ -32,6 +33,7 @@
   <ItemGroup>
     <ClInclude Include="..\Include\Media.h" />
     <ClInclude Include="..\Include\MediaException.h" />
+    <ClInclude Include="..\Include\MediaFrame.h" />
     <ClInclude Include="..\Include\MediaGeometry.h" />
     <ClInclude Include="..\Include\MediaLogger.h" />
     <ClInclude Include="..\Include\MediaUtf16Utf8.h" />
@@ -132,7 +134,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;MEDIA_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);WINXX;</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;MEDIA_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);WINXX;;OPENEXR_DLL;</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -152,7 +154,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;MEDIA_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);WINXX;</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;MEDIA_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);WINXX;;OPENEXR_DLL;</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
