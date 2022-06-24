@@ -121,6 +121,14 @@ namespace Media {
             m_pixels = allocatePixelBuffer(cx, cy, initialValue);
         }
 
+        FrameOf(unsigned cx, unsigned cy, std::shared_ptr <APixel[]> pixels, unsigned stride) : Frame(cx, cy) {
+
+            APixel initialValue = initialiseEmptyPixel(initialValue);
+
+            m_stride = stride;
+            m_pixels = pixels;
+        }
+
         FrameOf(const FrameOf& rhs) : Frame(rhs.width(), rhs.height()) {
             m_stride = rhs.m_stride;
             m_pixels = allocateDuplicatePixelBuffer(width(), rhs.height(), rhs.m_pixels);
@@ -181,8 +189,49 @@ namespace Media {
 #pragma warning (pop)
     };
 
+    typedef Imf_2_5::Rgba RgbaHalf;
     typedef FrameOf<Rgba8> FrameRgba8;
-    typedef FrameOf<Imf_2_5::Rgba> FrameRgbaHalf;
+    typedef FrameOf<RgbaHalf> FrameRgbaHalf;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // FrameColourMapper
+    ///////////////////////////////////////////////////////////////////////////////
+
+    class MEDIA_API FrameColourMapper
+    {
+    public:
+
+        // Constructors
+        FrameColourMapper();
+        virtual ~FrameColourMapper();
+
+
+        // Operations
+        virtual void convert(FrameRgba8& poutput, const FrameRgbaHalf& input) = 0;
+
+    private:
+        FrameColourMapper(const FrameColourMapper& rhs);
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // FrameSrgbColourMapper
+    ///////////////////////////////////////////////////////////////////////////////
+
+    class MEDIA_API FrameSrgbColourMapper : public FrameColourMapper
+    {
+    public:
+
+        // Constructors
+        FrameSrgbColourMapper();
+        virtual ~FrameSrgbColourMapper();
+
+
+        // Operations
+        void convert(FrameRgba8& output, const FrameRgbaHalf& input);
+
+    private:
+        FrameSrgbColourMapper(const FrameSrgbColourMapper& rhs);
+    };
 }
 
 #endif // MEDIAFRAME_INCLUDED

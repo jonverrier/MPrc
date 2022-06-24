@@ -45,3 +45,26 @@ TEST(Frame, Amend) {
 	EXPECT_NE(frame, differentFrame1);
 	EXPECT_NE(frame, differentFrame2);
 }
+
+TEST(Frame, Convertlinear) {
+
+	int width = 100, height = 100;
+
+	Imf_2_5::Rgba initialValue(0, 0, 0, 1.0);
+	unsigned stride = Media::stridePixels(width, initialValue);
+	std::shared_ptr < Media::RgbaHalf[]> pixels = Media::allocatePixelBuffer(width, height, initialValue);
+
+	Media::FrameRgbaHalf frame(width, height, pixels, stride);
+	Media::FrameRgba8 downConverted(width, height);
+
+	Media::FrameSrgbColourMapper converter;
+
+	converter.convert (downConverted, frame);
+	Media::Rgba8 pixel;
+
+	pixel = downConverted.pixelAt(0, 0);
+	EXPECT_EQ(pixel.r, 0x0);
+	EXPECT_EQ(pixel.g, 0x0);
+	EXPECT_EQ(pixel.b, 0x0);
+	EXPECT_EQ(pixel.a, 0xFF);
+}
