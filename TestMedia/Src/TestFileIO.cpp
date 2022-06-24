@@ -74,8 +74,6 @@ TEST(OpenImageIo, WriteSimplePng) {
 	EXPECT_EQ(caught, false);
 }
 
-// Not really a test, but fails to build if OpenImageIO is not installed properly. 
-
 TEST(OpenImageIo, ExrToPng) {
 
 	std::shared_ptr < Media::RgbaHalf[]> pixelsIn; 
@@ -104,7 +102,7 @@ TEST(OpenImageIo, ExrToPng) {
 		Media::Rgba8 initialValue = Media::initialiseEmptyPixel(initialValue);
 		pixelsOut = Media::allocatePixelBuffer(width, height, initialValue);
 
-		Media::FrameSrgbColourMapper converter;
+		Media::FrameSrgbOutputMapper converter;
 		Media::FrameRgbaHalf frameIn (width, height, pixelsIn, stride);
 		Media::FrameRgba8 frameOut(width, height, pixelsOut, stride);
 
@@ -129,6 +127,75 @@ TEST(OpenImageIo, ExrToPng) {
 		out->close();
 	}
 
+	EXPECT_EQ(true, true);
+}
+
+TEST(OpenImageIo, PngRoundtrip) {
+
+	std::shared_ptr < Media::Rgba8[]> pixelsIn;
+	std::shared_ptr < Media::RgbaHalf[]> pixelsIntermed;
+	unsigned width, height, stride;
+
+	// This block reads pixels from file into buffer
+	{
+		std::string filename = "ImageForRoundTripIn.jpg";
+		std::unique_ptr<OIIO::ImageInput> in = OIIO::ImageInput::open(filename);
+		if (!in)
+			return;
+		OIIO::ImageSpec spec = in->spec();
+
+		Media::Rgba8 initialValue = Media::initialiseEmptyPixel(initialValue);
+		width = spec.width;
+		height = spec.height;
+		stride = Media::stridePixels(width, initialValue);
+
+		pixelsIn = Media::allocatePixelBuffer(width, height, initialValue);
+
+        std::unique_ptr<Media::Rgb8[]> line (new Media::Rgb8[width]);
+
+		// Read lines one at a time - assumes JPG/PNG with three channels
+		// Then copy across to the RGBA buffer
+        for (unsigned y = 0; y < height; ++y) {
+		   in->read_scanline(y, 0, OIIO::TypeDesc::UINT8, &line[0]);
+		   for (unsigned x = 0; x < width; x++) {
+			   pixelsIn[y * stride + x] = Media::Rgba8(line[x].r, line[x].g, line[x].b, 0xFF);
+		   }
+		}
+	}
+
+	// This block converts the buffer to linear and then back again
+	{
+		Media::RgbaHalf initialValue = Media::initialiseEmptyPixel(initialValue);
+		pixelsIntermed = Media::allocatePixelBuffer(width, height, initialValue);
+
+		Media::FrameRgba8 frameIn(width, height, pixelsIn, stride);
+		Media::FrameRgbaHalf frameOut(width, height, pixelsIntermed, stride);
+
+		Media::FrameSrgbInputMapper converterIn;
+		converterIn.convert(frameOut, frameIn);
+
+		Media::FrameSrgbOutputMapper converterOut;
+		converterOut.convert(frameIn, frameOut);
+	}
+
+
+	// This block writes buffer to disk
+	{
+		std::string filename = "ImageForRoundTripOut.png";
+		std::unique_ptr<OIIO::ImageOutput> out = OIIO::ImageOutput::create(filename);
+		if (!out)
+			return;
+		OIIO::ImageSpec spec(width, height, 4, OIIO::TypeDesc::UINT8);
+		spec.channelnames.clear();
+		spec.channelnames.push_back("R");
+		spec.channelnames.push_back("G");
+		spec.channelnames.push_back("B");
+		spec.channelnames.push_back("A");
+
+		out->open(filename, spec);
+		out->write_image(OIIO::TypeDesc::UINT8, pixelsIn.get());
+		out->close();
+	}
 
 	EXPECT_EQ(true, true);
 }

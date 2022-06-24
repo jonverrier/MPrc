@@ -17,6 +17,37 @@
 namespace Media {
 
 
+#pragma pack (push, 1)
+    //
+    // RGB pixel 8 bit packed
+    //
+    struct Rgb8
+    {
+        unsigned char r;
+        unsigned char g;
+        unsigned char b;
+
+        Rgb8() : r(0), g(0), b(0) {}
+        Rgb8(unsigned char  r, unsigned char  g, unsigned char  b) : r(r), g(g), b(b) {}
+    };
+
+    //
+    // RGBA pixel 8 bit packed
+    //
+    struct Rgba8
+    {
+        unsigned char r;
+        unsigned char g;
+        unsigned char b;
+        unsigned char a;
+
+        Rgba8() : r(0), g(0), b(0), a(0xFF) {}
+        Rgba8(unsigned char  r, unsigned char  g, unsigned char  b, unsigned char  a = 0xFF) : r(r), g(g), b(b), a(a) {}
+    };
+#pragma pack (pop)
+
+    typedef Imf_2_5::Rgba RgbaHalf;
+
     ///////////////////////////////////////////////////////////////////////////////
     // Frame
     ///////////////////////////////////////////////////////////////////////////////
@@ -44,28 +75,12 @@ namespace Media {
         unsigned     m_cx, m_cy;
     };
 
-//
-// RGBA pixel 8 bit packed
-//
-#pragma pack (push, 1)
-    struct Rgba8
-    {
-        unsigned char r;
-        unsigned char g;
-        unsigned char b;
-        unsigned char a;
-
-        Rgba8() : r(0), g(0), b(0), a(0xFF) {}
-        Rgba8(unsigned char  r, unsigned char  g, unsigned char  b, unsigned char  a = 0xFF) : r(r), g(g), b(b), a(a) {}
-    };
-#pragma pack (pop)
-
 
     // These functions are outside the class, as they allow buffer to be allocated separately then passed in
     // eg if you are reading bytes from file, allocate the buffer, read them in, then pass buffer to this class ->saves an allocation
     Rgba8 MEDIA_API initialiseEmptyPixel(Rgba8& pixel);
 
-    Imf_2_5::Rgba MEDIA_API initialiseEmptyPixel(Imf_2_5::Rgba& pixel);
+    Media::RgbaHalf MEDIA_API initialiseEmptyPixel(Media::RgbaHalf& pixel);
 
     template <class APixel> unsigned stridePixels(unsigned cx, const APixel& pixel) {
         
@@ -189,48 +204,87 @@ namespace Media {
 #pragma warning (pop)
     };
 
-    typedef Imf_2_5::Rgba RgbaHalf;
     typedef FrameOf<Rgba8> FrameRgba8;
     typedef FrameOf<RgbaHalf> FrameRgbaHalf;
 
     ///////////////////////////////////////////////////////////////////////////////
-    // FrameColourMapper
+    // FrameColourOutputMapper
     ///////////////////////////////////////////////////////////////////////////////
 
-    class MEDIA_API FrameColourMapper
+    class MEDIA_API FrameColourOutputMapper
     {
     public:
 
         // Constructors
-        FrameColourMapper();
-        virtual ~FrameColourMapper();
+        FrameColourOutputMapper();
+        virtual ~FrameColourOutputMapper();
 
 
         // Operations
         virtual void convert(FrameRgba8& poutput, const FrameRgbaHalf& input) = 0;
 
     private:
-        FrameColourMapper(const FrameColourMapper& rhs);
+        FrameColourOutputMapper(const FrameColourOutputMapper& rhs);
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    // FrameSrgbColourMapper
+    // FrameSrgbOutputMapper
     ///////////////////////////////////////////////////////////////////////////////
 
-    class MEDIA_API FrameSrgbColourMapper : public FrameColourMapper
+    class MEDIA_API FrameSrgbOutputMapper : public FrameColourOutputMapper
     {
     public:
 
         // Constructors
-        FrameSrgbColourMapper();
-        virtual ~FrameSrgbColourMapper();
+        FrameSrgbOutputMapper();
+        virtual ~FrameSrgbOutputMapper();
 
 
         // Operations
         void convert(FrameRgba8& output, const FrameRgbaHalf& input);
 
     private:
-        FrameSrgbColourMapper(const FrameSrgbColourMapper& rhs);
+        FrameSrgbOutputMapper(const FrameSrgbOutputMapper& rhs);
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // FrameColourInputMapper
+    ///////////////////////////////////////////////////////////////////////////////
+
+    class MEDIA_API FrameColourInputMapper
+    {
+    public:
+
+        // Constructors
+        FrameColourInputMapper();
+        virtual ~FrameColourInputMapper();
+
+
+        // Operations
+        virtual void convert(FrameRgbaHalf& output, const FrameRgba8& input) = 0;
+
+    private:
+        FrameColourInputMapper(const FrameColourInputMapper& rhs);
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // FrameSrgbInputMapper
+    ///////////////////////////////////////////////////////////////////////////////
+
+    class MEDIA_API FrameSrgbInputMapper : public FrameColourInputMapper
+    {
+    public:
+
+        // Constructors
+        FrameSrgbInputMapper();
+        virtual ~FrameSrgbInputMapper();
+
+
+        // Operations
+        void convert(FrameRgbaHalf& output, const FrameRgba8& input);
+
+    private:
+        FrameSrgbInputMapper(const FrameSrgbInputMapper& rhs);
     };
 }
 

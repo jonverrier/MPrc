@@ -57,7 +57,7 @@ TEST(Frame, Convertlinear) {
 	Media::FrameRgbaHalf frame(width, height, pixels, stride);
 	Media::FrameRgba8 downConverted(width, height);
 
-	Media::FrameSrgbColourMapper converter;
+	Media::FrameSrgbOutputMapper converter;
 
 	converter.convert (downConverted, frame);
 	Media::Rgba8 pixel;
