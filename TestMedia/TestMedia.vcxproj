@@ -52,6 +52,7 @@
     <ClCompile Include="Src\TestException.cpp" />
     <ClCompile Include="Src\TestFileIO.cpp" />
     <ClCompile Include="Src\TestFrame.cpp" />
+    <ClCompile Include="Src\TestFrameFilename.cpp" />
     <ClCompile Include="Src\TestGeometry.cpp" />
     <ClCompile Include="Src\TestUnicode.cpp" />
     <ClCompile Include="Src\TestUtf16Utf8.cpp" />

@@ -23,6 +23,7 @@
     <ClCompile Include="Src\ExceptionLogger.cpp" />
     <ClCompile Include="Src\Frame.cpp" />
     <ClCompile Include="Src\FrameColourMappers.cpp" />
+    <ClCompile Include="Src\FrameFilename.cpp" />
     <ClCompile Include="Src\LetterBox.cpp" />
     <ClCompile Include="Src\Logger.cpp" />
     <ClCompile Include="Src\pch.cpp">
@@ -35,6 +36,7 @@
     <ClInclude Include="..\Include\Media.h" />
     <ClInclude Include="..\Include\MediaException.h" />
     <ClInclude Include="..\Include\MediaFrame.h" />
+    <ClInclude Include="..\Include\MediaFrameFilename.h" />
     <ClInclude Include="..\Include\MediaGeometry.h" />
     <ClInclude Include="..\Include\MediaLogger.h" />
     <ClInclude Include="..\Include\MediaUtf16Utf8.h" />

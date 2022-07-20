@@ -8,5 +8,12 @@
 #define PCH_H
 
 // add headers that you want to pre-compile here
+#include <string>
+#include <memory>
+#include <stdexcept>
+#include <iostream>
+#include <cassert>
+#include <algorithm>
+#include <string>
 
 #endif //PCH_H

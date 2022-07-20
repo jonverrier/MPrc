@@ -1,9 +1,9 @@
 #include "pch.h"
 
-#include "../../Include/MediaUtf16Utf8.h"
-
-#define U_SHOW_CPLUSPLUS_API TRUE
+#define U_SHOW_CPLUSPLUS_API 1
 #include <unicode/unistr.h>
+
+#include "../../Include/MediaUtf16Utf8.h"
 
 // Not really a test, but fails to build if ICU is not installed properly. 
 
