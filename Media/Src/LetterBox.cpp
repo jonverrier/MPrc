@@ -1,6 +1,6 @@
 /////////////////////////////////////////
-// ExceptionLogger.cpp
-// Copyright (c) 2020 TXPCo Ltd
+// LetterBox.cpp
+// Copyright (c) 2022 TXPCo Ltd
 /////////////////////////////////////////
 
 #include "pch.h"
@@ -9,6 +9,8 @@
 #include "../../Include/MediaException.h"
 #include "../../Include/MediaGeometry.h"
 
+
+static const Media::MGBox nullBox = Media::MGBox(Media::MGPoint(0.0, 0.0), Media::MGPoint(0.0, 0.0));
 
 namespace Media {
 
@@ -39,10 +41,10 @@ namespace Media {
         double destinationLBHeight;
         MGBox letterBox;
 
-        if (!isValidForLetterBox (source))
-            throw std::invalid_argument("Source is invalid size for LetterBox calculation.");
-        if (!isValidForLetterBox(source))
-            throw std::invalid_argument("Target is invalid size for LetterBox calculation.");
+        if (!isValidForLetterBox(source) || !isValidForLetterBox(source)) {
+            fill1 = fill2 = nullBox;
+            return nullBox;
+        }
 
         if (((sourceWidth * destinationHeight) / sourceHeight) <= destinationWidth)
         {

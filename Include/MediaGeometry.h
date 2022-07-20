@@ -1,6 +1,6 @@
 /////////////////////////////////////////
 // MediaGeometry.h
-// Copyright (c) 2020 TXPCo Ltd
+// Copyright (c) 2022 TXPCo Ltd
 /////////////////////////////////////////
 
 #ifndef MEDIAGEOMETRY_INCLUDED

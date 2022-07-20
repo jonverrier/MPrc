@@ -1,6 +1,6 @@
 /////////////////////////////////////////
-// Utf16Utf8.h
-// Copyright (c) 2020 TXPCo Ltd
+// MediaUtf16Utf8.h
+// Copyright (c) 2022 TXPCo Ltd
 /////////////////////////////////////////
 
 #ifndef MEDIAUTF16UTF8_INCLUDED

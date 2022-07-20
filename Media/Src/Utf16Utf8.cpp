@@ -1,6 +1,6 @@
 /////////////////////////////////////////
 // ExceptionLogger.cpp
-// Copyright (c) 2020 TXPCo Ltd
+// Copyright (c) 2022 TXPCo Ltd
 /////////////////////////////////////////
 
 #include "pch.h"
@@ -78,6 +78,10 @@ namespace Media {
 
         // Allocate buffer, with a safe pointer
         std::unique_ptr<wchar_t> pUtf16Buffer(static_cast <wchar_t*> (malloc((utf8Length + 1) * sizeof (wchar_t))));
+        if (!pUtf16Buffer.get()) {
+            throw std::overflow_error(
+                "Unable to allocate translation buffer.");
+        }
 
         // Copy it over  
         size_t copied = 0;
