@@ -8,7 +8,7 @@
 
 #include <string_view>
 
-#include <OpenEXR/ImfRgba.h>
+#include "OpenEXR/ImfRgba.h"
 
 #include "Host.h"
 #include "HostException.h"

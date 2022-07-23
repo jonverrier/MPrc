@@ -21,7 +21,7 @@ namespace Media {
     ///////////////////////////////////////////////////////////////////////////////
     void ExceptionLogger::log(const std::wstring_view formatted) const {
 
-        // Transcode without strict tranlation - so we at least get seomething in the log. 
+        // Transcode without strict translation - so we at least get seomething in the log. 
         Media::LoggerFactory::get()->error (Media::Utf16ToUtf8 (formatted, false));
 
     };
