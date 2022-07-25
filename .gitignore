@@ -9,6 +9,7 @@
 */vcpkg_installed/*
 .vs/*
 x64/*
+out/*
 packages/*
 node_modules/*
 spdlog/*

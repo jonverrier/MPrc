@@ -123,7 +123,7 @@ namespace Media {
         wchar_t buffer[HOST_STRING_BUFFER_SIZE];
         unsigned scene = 0, shot = 0, frame = 0, version = 0;
 
-        unsigned n = swscanf_s (input.c_str(), L"%[^_]_%03d_%03d_%03d_v%03d", buffer, HOST_STRING_BUFFER_SIZE, &scene, &shot, &frame, &version);
+        unsigned n = swscanf_s (input.c_str(), L"%[^_]_%03d_%03d_%04d_v%03d", buffer, HOST_STRING_BUFFER_SIZE, &scene, &shot, &frame, &version);
         if (n != 5) {
             throw std::runtime_error(
                 "Unable to parse frame parameters from filename.");
@@ -137,7 +137,7 @@ namespace Media {
 
     std::wstring MEDIA_API FrameFilename::format(const FrameFilename& frameFilename) {
 
-        std::shared_ptr<wchar_t> pBuffer = SafeSprintf(L"%s_%03d_%03d_%03d_v%03d", frameFilename.projectName().c_str(), frameFilename.scene(), frameFilename.shot(), frameFilename.frame(), frameFilename.version());
+        std::shared_ptr<wchar_t> pBuffer = SafeSprintf(L"%s_%03d_%03d_%04d_v%03d", frameFilename.projectName().c_str(), frameFilename.scene(), frameFilename.shot(), frameFilename.frame(), frameFilename.version());
 
         return std::wstring (pBuffer.get());
     }
