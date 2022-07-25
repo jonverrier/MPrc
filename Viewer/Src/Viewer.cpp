@@ -4,7 +4,6 @@
 #include "framework.h"
 #include "Viewer.h"
 
-#define WINXX
 #include "../../Include/MediaGeometry.h"
 
 #define MAX_LOADSTRING 100
@@ -165,7 +164,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             HDC hdc = BeginPaint(hWnd, &ps);
 
             Gdiplus::Graphics graphics(hdc);
-            Gdiplus::Image image(L"image_log.jpg");
+            Gdiplus::Image image(L"ImageLog.png");
             
             // How big is the image
             Media::MGSize imageSize(image.GetWidth(), image.GetHeight());

@@ -15,4 +15,10 @@ add_subdirectory ("Media")
 add_dependencies(Media Host)
 
 add_subdirectory ("TestMedia")
-#add_dependencies(TestMedia Media)
+add_dependencies(TestMedia Media Host)
+
+add_subdirectory ("MapColours")
+add_dependencies(MapColours Media Host)
+
+add_subdirectory ("Viewer")
+add_dependencies(Viewer Media Host)
