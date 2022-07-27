@@ -13,9 +13,9 @@ TEST(MediaHostExceptionLogging, Logging) {
   bool caught = false;
 
   try {
-	  THROW(Host::Exception, 1);
+	  THROW_ENRICHED(std::exception, Host::ExceptionSource::kSystem, 1, "Hello thrown");
   }
-  catch (Host::Exception& ex) {
+  catch (std::exception& ex) {
 	  caught = true;
 	  UNREFERENCED_PARAMETER(ex);
   }

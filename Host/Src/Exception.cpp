@@ -6,17 +6,85 @@
 #include "pch.h"
 
 #include <string>
-#include <iostream>
+#include <format>
+
+#ifdef WINXX
 #include <atlbase.h> 
 #include <OleAuto.h>
 #include <D2DErr.h>
 #include <mferror.h>
+#endif
 
 #include "../../Include/HostException.h"
 
-const std::wstring defaultErrorString = L"Cannot obtain error information from system.\n";
-
 static const Host::ExceptionLogger* pGlobalLogger = NULL;
+const wchar_t* defaultErrorString = L"Cannot obtain error information from system.\n";
+
+#if 0
+static void formatSystemException(unsigned code, wchar_t buffer[], unsigned bufferSize) {
+
+#ifdef WINXX
+    // System error if non zero, and facility is unspecified or WIN32
+    if (code != 0 &&
+        ((HRESULT_FACILITY(code) == FACILITY_WIN32) || (HRESULT_FACILITY(code) == 0))) {
+
+        LONG lRet = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM,
+            NULL, code, 0,
+            buffer,
+            bufferSize - 1,
+            NULL);
+
+        if (lRet == 0)
+            wcsncpy_s (buffer, bufferSize, defaultErrorString, bufferSize - 1);
+    }
+    else
+        if ((HRESULT_FACILITY(code) == FACILITY_MF
+            || (HRESULT_FACILITY(code) == FACILITY_D2D)))
+        {
+            CComPtr<IErrorInfo> pErrInfo;
+
+            HRESULT result = ::GetErrorInfo(0, &pErrInfo);
+            if (SUCCEEDED(result) && pErrInfo != (NULL))
+            {
+                BSTR bstr;
+                pErrInfo->GetDescription(&bstr);
+                wcsncpy_s (buffer, bufferSize, bstr, bufferSize - 1);
+                ::SysFreeString(bstr);
+                ::SetErrorInfo(0, pErrInfo); // This propogates error info up the call chain
+            }
+            else
+            {
+                wcsncpy_s(buffer, bufferSize, defaultErrorString, bufferSize - 1);
+            }
+        }
+#else
+    wcsncpy(buffer, defaultErrorString, bufferSize - 1);
+#endif
+}
+
+void formatCrtException(unsigned code, wchar_t buffer[], unsigned bufferSize) {
+
+    char localBuffer[HOST_STRING_BUFFER_SIZE];
+    localBuffer[0] = '0';
+
+    strerror_s (localBuffer, HOST_STRING_BUFFER_SIZE, code);
+
+    if (strlen (localBuffer) > 0) {
+       size_t copied = 0;
+       auto err = mbstowcs_s(
+           &copied,
+           buffer,
+           bufferSize,
+           localBuffer,
+           bufferSize);
+    }
+    else {
+        wcsncpy_s(buffer, bufferSize, defaultErrorString, bufferSize - 1);
+    }
+}
+
+#endif
+
 
 namespace Host {
 
@@ -33,6 +101,10 @@ namespace Host {
         return pOldLogger;
     };
 
+    const ExceptionLogger* ExceptionLoggerFactory::get() {
+
+        return pGlobalLogger;
+    };
 
     ///////////////////////////////////////////////////////////////////////////////
     // ExceptionLogger
@@ -41,143 +113,18 @@ namespace Host {
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    // Exception
+    // formatRaisedException
     ///////////////////////////////////////////////////////////////////////////////
+    std::string HOST_API formatRaisedException(ExceptionSource source,
+        unsigned errorNo,
+        const char* pFileName,
+        unsigned lineNo,
+        const char* pMsg) {
 
-    Exception::Exception(unsigned int errorCode,
-        std::wstring_view fileName,
-        unsigned lineNumber)
-        : m_errorCode(errorCode),
-        m_lineNumber(lineNumber),
-        m_fileName(fileName),
-        m_formatted()
-    {
-        std::wstring extraOut;
+        std::stringstream ss;
 
-        logException(errorCode, fileName, lineNumber, m_formatted);
+        ss << std::format("Exception code:{:#x} Source:{:#x} file:{} line:{} message:{}\n", errorNo, static_cast<unsigned>(source), pFileName, lineNo, pMsg);
+
+        return ss.str();
     }
-
-    Exception::Exception(const Exception& copyMe)
-        : m_errorCode(copyMe.m_errorCode),
-        m_lineNumber(copyMe.m_lineNumber),
-        m_fileName(copyMe.m_fileName),
-        m_formatted(copyMe.m_formatted)
-    {
-    }
-
-    Exception::~Exception()
-    {
-    }
-
-    unsigned int Exception::errorCode() const
-    {
-        return m_errorCode;
-    }
-
-    std::wstring
-    Exception::formatted() const
-    {
-        return m_formatted;
-    }
-
-    std::wstring_view
-    Exception::sourceFilename() const
-    {
-        return m_fileName;
-    }
-
-    unsigned
-    Exception::sourceLineNumber() const
-    {
-        return m_lineNumber;
-    }
-
-    bool
-    Exception::operator== (const Exception& rhs) const
-    {
-        if (this == &rhs)
-            return TRUE;
-
-        return m_errorCode == rhs.m_errorCode
-            && m_formatted == rhs.m_formatted
-            && m_fileName == rhs.m_fileName
-            && m_lineNumber == rhs.m_lineNumber;
-    }
-
-    bool
-    Exception::operator!= (const Exception& rhs) const
-    {
-        if (this == &rhs)
-            return FALSE;
-
-        return m_errorCode != rhs.m_errorCode
-            || m_formatted != rhs.m_formatted
-            || m_fileName != rhs.m_fileName
-            || m_lineNumber != rhs.m_lineNumber;
-    }
-
-    Exception&
-    Exception::operator= (const Exception& copyMe)
-    {
-        m_errorCode = copyMe.m_errorCode;
-        m_fileName = copyMe.m_fileName;
-        m_lineNumber = copyMe.m_lineNumber;
-        m_formatted = copyMe.m_formatted;
-
-        return *this;
-    }
-
-    void
-    Exception::logException(unsigned int errorCode,
-            std::wstring_view fileName,
-            unsigned int lineNumber,
-            std::wstring& out)
-    {
-        out = {};
-
-        // System error if non zero, and facility is unspecified or WIN32
-        if (errorCode != 0 &&
-            ((HRESULT_FACILITY(errorCode) == FACILITY_WIN32) || (HRESULT_FACILITY(errorCode) == 0))) {
-
-            wchar_t sz[HOST_STRING_BUFFER_SIZE];
-            LONG lRet = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM,
-                NULL, errorCode, 0,
-                sz,
-                HOST_STRING_BUFFER_SIZE - 1,
-                NULL);
-
-            if (lRet == 0)
-                out = defaultErrorString;
-
-            out = sz;
-        }
-        else
-        if ((HRESULT_FACILITY(errorCode) == FACILITY_MF
-             || (HRESULT_FACILITY(errorCode) == FACILITY_D2D)))
-        {
-            CComPtr<IErrorInfo> pErrInfo;
-
-            HRESULT result = ::GetErrorInfo(0, &pErrInfo);
-            if (SUCCEEDED(result) && pErrInfo != (NULL))
-            {
-                BSTR bstr;
-                pErrInfo->GetDescription(&bstr);
-
-                out = bstr;
-                ::SysFreeString(bstr);
-                ::SetErrorInfo(0, pErrInfo); // This propogates error info up the call chain
-            }
-            else {
-                out = defaultErrorString;
-            }
-        }
-
-        if (pGlobalLogger) {
-            pGlobalLogger->log(out);
-        }
-        else {
-            std::wcout << out;
-        }
-    }
-
 }

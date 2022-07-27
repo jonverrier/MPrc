@@ -40,7 +40,7 @@ namespace Media {
     void FrameSrgbOutputMapper::convert(FrameRgba8& output, const FrameRgbaHalf& input) {
 
         if (output.width() != input.width() || input.height() != output.height())
-            throw std::invalid_argument("Input and output frames are not the same size." " " __FILE__ ":" + std::to_string(__LINE__));
+            THROW_ENRICHED(std::invalid_argument, Host::ExceptionSource::kCRT, EINVAL, "Input and output frames are not the same size.");
 
         for (unsigned y = 0; y < input.height(); y++) {
             for (unsigned x = 0; x < input.width(); x++) {
@@ -87,7 +87,7 @@ namespace Media {
     void FrameSrgbInputMapper::convert(FrameRgbaHalf& output, const FrameRgba8& input) {
 
         if (output.width() != input.width() || input.height() != output.height())
-            throw std::invalid_argument("Input and output frames are not the same size." " " __FILE__ ":" + std::to_string(__LINE__));
+            THROW_ENRICHED(std::invalid_argument, Host::ExceptionSource::kCRT, EINVAL, "Input and output frames are not the same size.");
 
         for (unsigned y = 0; y < input.height(); y++) {
             for (unsigned x = 0; x < input.width(); x++) {

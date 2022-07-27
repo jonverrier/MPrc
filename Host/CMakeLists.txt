@@ -4,10 +4,15 @@
 cmake_minimum_required (VERSION 3.8)
 
 # Add source to this project's executable.
-add_library (Host SHARED "src/Exception.cpp" "src/dllmain.cpp" "src/pch.cpp")
+add_library (Host SHARED "src/Exception.cpp" "src/dllmain.cpp" "src/pch.cpp" )
 
-# Set HOST_EXPORTS to generate DLL callable exported functions
-target_compile_definitions(Host PRIVATE WINXX HOST_EXPORTS UNICODE)
+# COnditional compiler flags for platform WINXX/LINUX
+if (WINXX)
+   target_compile_definitions(Host PRIVATE HOST_EXPORTS UNICODE WINXX)
+endif()
+if (LINUX)
+   target_compile_definitions(Host PRIVATE HOST_EXPORTS UNICODE LINUX)
+endif()
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET Host PROPERTY CXX_STANDARD 20)

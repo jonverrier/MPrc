@@ -32,8 +32,7 @@ static std::shared_ptr<wchar_t> SafeSprintf(const wchar_t* format, ...) {
 
     std::shared_ptr<wchar_t> pBuffer  (static_cast<wchar_t*> (malloc (length * sizeof(wchar_t))));
     if (!pBuffer.get()) {
-        throw std::overflow_error(
-            "Unable to allocate translation buffer.");
+        THROW_ENRICHED(std::overflow_error, Host::ExceptionSource::kCRT, ENOMEM, "Unable to allocate translation buffer.");
     }
 
     va_start(arguments, format);
@@ -50,8 +49,7 @@ namespace Media {
         : m_projectName (projectName), m_scene (scene), m_shot (shot), m_frame (frame), m_version (version)
     {
         if (!isValidProjectName(projectName)) {
-            throw std::invalid_argument(
-                "Invalid project name.");
+            THROW_ENRICHED(std::invalid_argument, Host::ExceptionSource::kCRT, EINVAL, "Invalid project name.");
         }
     }
     
@@ -125,8 +123,7 @@ namespace Media {
 
         unsigned n = swscanf_s (input.c_str(), L"%[^_]_%03d_%03d_%04d_v%03d", buffer, HOST_STRING_BUFFER_SIZE, &scene, &shot, &frame, &version);
         if (n != 5) {
-            throw std::runtime_error(
-                "Unable to parse frame parameters from filename.");
+            THROW_ENRICHED(std::invalid_argument, Host::ExceptionSource::kCRT, EINVAL, "Unable to parse frame parameters from filename.");
         }
 
         buffer[HOST_STRING_BUFFER_SIZE - 1] = L'\0';

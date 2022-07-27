@@ -20,7 +20,8 @@ namespace Media {
         
     public:
         virtual void log (const std::wstring_view formatted) const;
-        
+        virtual void log(const std::string_view formatted) const;
+
         virtual
         ~ExceptionLogger(void);
     }; 

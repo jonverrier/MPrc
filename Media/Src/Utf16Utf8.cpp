@@ -17,7 +17,7 @@
 
 namespace Media {
 
-    std::string Utf16ToUtf8(const std::wstring_view& utf16, bool strict)
+    std::string Utf16ToUtf8(const std::wstring_view utf16, bool strict)
     {
         std::string utf8; // Result
 
@@ -28,8 +28,7 @@ namespace Media {
 
         if (utf16.length() > static_cast<size_t>((std::numeric_limits<int>::max)()))
         {
-            throw std::overflow_error(
-                "Input string too long: size_t-length doesn't fit into int.");
+            THROW_ENRICHED(std::overflow_error, Host::ExceptionSource::kCRT, EOVERFLOW, "Input string too long: size_t-length doesn't fit into int.");
         }
 
         // Safely convert from size_t(STL string's length)
@@ -49,15 +48,14 @@ namespace Media {
             utf16Length);
 
         if (strict && copied != utf16Length + 1)
-            throw  std::invalid_argument(
-                "Unable to translate all of input string to UTF8.");
+            THROW_ENRICHED(std::invalid_argument, Host::ExceptionSource::kCRT, EINVAL, "Unable to translate all of input string to UTF8.");
 
         utf8 = (pUtf8Buffer.get());
 
         return utf8;
     }
 
-    std::wstring Utf8ToUtf16(const std::string_view& utf8, bool strict)
+    std::wstring Utf8ToUtf16(const std::string_view utf8, bool strict)
     {
         std::wstring utf16; // Result
 
@@ -68,8 +66,7 @@ namespace Media {
 
         if (utf8.length() > static_cast<size_t>((std::numeric_limits<int>::max)()))
         {
-            throw std::overflow_error(
-                "Input string too long: size_t-length doesn't fit into int.");
+            THROW_ENRICHED(std::overflow_error, Host::ExceptionSource::kCRT, EOVERFLOW, "Input string too long: size_t-length doesn't fit into int.");
         }
 
         // Safely convert from size_t(STL string's length)
@@ -79,8 +76,7 @@ namespace Media {
         // Allocate buffer, with a safe pointer
         std::unique_ptr<wchar_t> pUtf16Buffer(static_cast <wchar_t*> (malloc((utf8Length + 1) * sizeof (wchar_t))));
         if (!pUtf16Buffer.get()) {
-            throw std::overflow_error(
-                "Unable to allocate translation buffer.");
+            THROW_ENRICHED(std::overflow_error, Host::ExceptionSource::kCRT, ENOMEM, "Unable to allocate translation buffer.");
         }
 
         // Copy it over  
@@ -93,8 +89,7 @@ namespace Media {
             utf8Length);
 
         if (strict && copied != utf8Length + 1)
-            throw  std::invalid_argument(
-                "Unable to translate all of input string to UTF8.");
+            THROW_ENRICHED(std::invalid_argument, Host::ExceptionSource::kCRT, EINVAL, "Unable to translate all of input string to UTF8.");
 
         utf16 = (pUtf16Buffer.get());
 

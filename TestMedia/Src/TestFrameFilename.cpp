@@ -1,6 +1,8 @@
 #include "pch.h"
 
 #include <exception>
+
+#include "../../Include/Host.h"
 #include "../../Include/MediaFrameFilename.h"
 
 TEST(MediaFrameFilename, ConstructCopyAssign) {
@@ -22,6 +24,7 @@ TEST(MediaFrameFilename, InvalidConstruct) {
         Media::FrameFilename filename(L"proj_ect", 0, 0, 0, 1);
     }
     catch (const std::exception& e) {
+        UNREFERENCED_PARAMETER(e);
         caught = true;
     }
 

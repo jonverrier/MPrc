@@ -26,6 +26,13 @@ namespace Media {
 
     };
 
+    void ExceptionLogger::log(const std::string_view formatted) const {
+
+        // Transcode without strict translation - so we at least get seomething in the log. 
+        Media::LoggerFactory::get()->error(formatted);
+
+    };
+
     ExceptionLogger::~ExceptionLogger(void) {
     };
 

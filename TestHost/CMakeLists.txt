@@ -7,7 +7,15 @@ cmake_minimum_required (VERSION 3.8)
 add_executable (TestHost "src/TestException.cpp" "src/main.cpp" "src/pch.cpp")
 
 # Set HOST_EXPORTS to generate DLL callable exported functions
-target_compile_definitions(TestHost PRIVATE WINXX UNICODE)
+target_compile_definitions(TestHost PRIVATE UNICODE)
+
+# COnditional compiler flags for platform WINXX/LINUX
+if (WINXX)
+   target_compile_definitions(TestHost PRIVATE HOST_EXPORTS UNICODE WINXX)
+endif()
+if (LINUX)
+   target_compile_definitions(TestHost PRIVATE HOST_EXPORTS UNICODE LINUX)
+endif()
 
 # To find and use gtest.hpp
 find_package(GTest CONFIG REQUIRED)

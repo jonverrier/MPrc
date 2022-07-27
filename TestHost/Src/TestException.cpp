@@ -9,46 +9,23 @@
 
 TEST(HostExceptionTest, SimpleConstruction) {
 
-	Host::Exception ex(0, HOST_WFILE, 2);
+	Host::EnrichedExFrom<std::exception> ex(Host::ExceptionSource::kSystem, 0, __FILE__, __LINE__, "Hello");
 
-	EXPECT_EQ(ex.errorCode(), 0);
-	EXPECT_EQ(ex.sourceLineNumber(), 2);
-	EXPECT_EQ(ex.sourceFilename(), HOST_WFILE);
-	EXPECT_TRUE(ex.formatted().size() == 0);
-}
-
-TEST(HostExceptionTest, FormattingOS) {
-
-	Host::Exception ex(ERROR_ACCESS_DENIED, HOST_WFILE, 2);
-
-	EXPECT_EQ(ex.errorCode(), ERROR_ACCESS_DENIED);
-	EXPECT_EQ(ex.sourceLineNumber(), 2);
-	EXPECT_EQ(ex.sourceFilename(), HOST_WFILE);
-	EXPECT_TRUE(ex.formatted().size() > 0);
-}
-
-TEST(HostExceptionTest, FormattingMF) {
-
-	Host::Exception ex(MAKE_HRESULT(SEVERITY_ERROR, FACILITY_MF, MF_E_BUFFERTOOSMALL), HOST_WFILE, 2);
-
-	EXPECT_EQ(ex.errorCode(), MAKE_HRESULT(SEVERITY_ERROR, FACILITY_MF, MF_E_BUFFERTOOSMALL));
-	EXPECT_EQ(ex.sourceLineNumber(), 2);
-	EXPECT_EQ(ex.sourceFilename(), HOST_WFILE);
-	EXPECT_TRUE(ex.formatted().size() > 0);
+	EXPECT_EQ(strlen(ex.what())>0, true);
 }
 
 TEST(HostExceptionTest, Throw) {
 
-	Host::Exception ex(MAKE_HRESULT(SEVERITY_ERROR, FACILITY_MF, MF_E_BUFFERTOOSMALL), HOST_WFILE, 2);
 	bool caught = false;
 
 	try {
-		THROW(Host::Exception, ERROR_ACCESS_DENIED);
+		THROW_ENRICHED(std::exception, Host::ExceptionSource::kSystem, 1, "Hello thrown");
 	}
-	catch (Host::Exception& ex) {
+	catch (std::exception& ex) {
 		caught = true;
 		UNREFERENCED_PARAMETER(ex);
 	}
 
 	EXPECT_EQ(caught, true);
 }
+
